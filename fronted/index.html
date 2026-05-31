@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hotel Management</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">Hotel Management System</p>
+      <h1>Book rooms, manage guests, and track revenue</h1>
+    </div>
+    <nav>
+      <button data-view="rooms">Rooms</button>
+      <button data-view="bookings" id="bookingsNav">My Bookings</button>
+      <button data-view="admin" id="adminNav" class="hidden">Admin</button>
+      <button id="loginNavBtn">Login</button>
+      <button id="logoutBtn" class="hidden">Logout</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="roomsView" class="view">
+      <div class="section-title rooms-title">
+        <div>
+          <h2>Available Rooms</h2>
+          <p>Choose a room type, compare prices, and book your stay.</p>
+        </div>
+        <div id="roomSummary" class="room-summary"></div>
+      </div>
+
+      <div class="toolbar">
+        <input id="searchInput" placeholder="Search by room type">
+        <select id="typeFilter">
+          <option value="">All types</option>
+          <option>Standard</option>
+          <option>Deluxe</option>
+          <option>Suite</option>
+          <option>Family</option>
+        </select>
+        <input id="maxPriceFilter" type="number" min="0" placeholder="Max price">
+        <button id="loadRoomsBtn">Apply</button>
+      </div>
+      <div id="rooms" class="room-grid"></div>
+    </section>
+
+    <section id="bookingsView" class="view hidden">
+      <div class="section-title">
+        <h2 id="bookingsTitle">My Bookings</h2>
+        <p id="bookingsSubtitle">Confirmed, cancelled, and historical reservations.</p>
+      </div>
+      <div id="bookings" class="booking-list"></div>
+    </section>
+
+    <section id="adminView" class="view hidden">
+      <div class="section-title">
+        <h2>Admin Dashboard</h2>
+        <p>Manage rooms, users, bookings, and analytics.</p>
+      </div>
+      <div id="analytics" class="stats-grid"></div>
+
+      <div class="admin-grid">
+        <form id="roomForm" class="panel">
+          <h3>Add Room</h3>
+          <input name="roomNumber" type="number" placeholder="Room number" required>
+          <select name="type" required>
+            <option>Standard</option>
+            <option>Deluxe</option>
+            <option>Suite</option>
+            <option>Family</option>
+          </select>
+          <input name="price" type="number" min="0" placeholder="Price per day" required>
+          <input name="capacity" type="number" min="1" placeholder="Capacity" value="2">
+          <input name="imageUrl" placeholder="Image URL">
+          <input name="amenities" placeholder="Amenities comma separated">
+          <textarea name="description" placeholder="Room description"></textarea>
+          <button type="submit">Save Room</button>
+        </form>
+
+        <div class="panel">
+          <h3>All Bookings</h3>
+          <div id="adminBookings" class="compact-list"></div>
+        </div>
+
+        <div class="panel">
+          <h3>Users</h3>
+          <div id="usersList" class="compact-list"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="bookingDialog">
+    <form id="bookingForm">
+      <h2 id="bookingTitle">Book Room</h2>
+      <input type="hidden" name="roomId">
+      <label>Check-in <input name="checkIn" type="date" required></label>
+      <label>Check-out <input name="checkOut" type="date" required></label>
+      <label>Guests <input name="guests" type="number" min="1" value="1"></label>
+      <label>Payment
+        <select name="paymentMethod">
+          <option value="dummy">Dummy Payment</option>
+          <option value="stripe">Stripe Demo</option>
+          <option value="razorpay">Razorpay Demo</option>
+        </select>
+      </label>
+      <div class="dialog-actions">
+        <button type="button" id="closeBookingBtn">Close</button>
+        <button type="submit">Confirm Booking</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="authDialog">
+    <div class="auth-modal">
+      <form id="loginForm" autocomplete="off">
+        <h2 id="loginTitle">User Login</h2>
+        <p id="loginHelp">Login to book rooms and view your own booking history.</p>
+        <div class="login-choice">
+          <button type="button" class="choice-active" id="userLoginChoice">User</button>
+          <button type="button" id="adminLoginChoice">Admin</button>
+        </div>
+        <input name="email" type="email" placeholder="Email" autocomplete="off" required>
+        <input name="password" type="password" placeholder="Password" autocomplete="new-password" required>
+        <label class="check-row">
+          <input type="checkbox" data-password-toggle="loginForm">
+          <span>Show password</span>
+        </label>
+        <button type="submit">Login</button>
+        <button type="button" class="link-button" id="showRegisterBtn">Don't have an account? Create one</button>
+      </form>
+
+      <form id="registerForm" class="hidden" autocomplete="off">
+        <h2>Create Account</h2>
+        <p>Create an account to manage bookings and payments.</p>
+        <input name="name" placeholder="Full name" autocomplete="off" required>
+        <input name="email" type="email" placeholder="Email" autocomplete="off" required>
+        <input name="password" type="password" placeholder="Password" autocomplete="new-password" required>
+        <label class="check-row">
+          <input type="checkbox" data-password-toggle="registerForm">
+          <span>Show password</span>
+        </label>
+        <button type="submit">Register</button>
+        <button type="button" class="link-button" id="showLoginBtn">Already have an account? Login</button>
+      </form>
+
+      <button type="button" id="closeAuthBtn" class="close-button">Close</button>
+    </div>
+  </dialog>
+
+  <div id="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
